@@ -6,6 +6,7 @@ from .debug import debugFun
 
 @debugFun
 def getPosToRecompute(m, forCards, oldModel = None, newIdxMeta=None):
+        print(f"Computing getPosToRecompute for "+("cards" if forCards else "req")+ f". newIdxMeta is {newIdxMeta}")
         if newIdxMeta is None:
                 posToRecompute = list(range(len(m['tmpls'])))
         posToRecompute = []
@@ -16,8 +17,9 @@ def getPosToRecompute(m, forCards, oldModel = None, newIdxMeta=None):
                 else:
                         oldTmpl =oldModel['tmpls'][oldIdx]
                         if ((newIdxMeta[idx]["is new"] and forCards) or
-                            tmpl['qfmt']!=['qfmt']):
+                            tmpl['qfmt']!=oldTmpl['qfmt']):
                                 posToRecompute.append(idx)
+        print(f"posToRecompute is {posToRecompute}")
         return posToRecompute
 
 @debugFun
