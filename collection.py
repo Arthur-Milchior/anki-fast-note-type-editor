@@ -2,8 +2,9 @@ from anki.collection import _Collection
 from anki.utils import ids2str, maxID, intTime
 from .debug import debugFun
 
+
 @debugFun
-def genCards(self, nids, posToRecompute=None):
+def genCards(self, nids, posToRecompute = None):
         """Ids of cards needed to be removed.
 
         Generate missing cards of a note with id in nids and with ord in posToRecompute.

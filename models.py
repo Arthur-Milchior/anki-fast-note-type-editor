@@ -5,7 +5,23 @@ from anki.hooks import runHook
 from .debug import debugFun
 
 @debugFun
-def save(self, m=None, templates=False, oldModel=None, newIdxToOld = None):
+def getPosToRecompute(m, forCards, oldModel = None, newIdxMeta=None):
+        if newIdxMeta is None:
+                posToRecompute = list(range(len(m['tmpls'])))
+        posToRecompute = []
+        for idx, tmpl in enumerate(m['tmpls']):
+                oldIdx = newIdxMeta[idx]["old idx"]
+                if oldIdx is None:
+                        posToRecompute.append(idx)
+                else:
+                        oldTmpl =oldModel['tmpls'][oldIdx]
+                        if ((newIdxMeta[idx]["is new"] and forCards) or
+                            tmpl['qfmt']!=['qfmt']):
+                                posToRecompute.append(idx)
+        return posToRecompute
+
+@debugFun
+def save(self, m=None, templates=False, oldModel=None, newIdxMeta = None):
         """
         * Mark m modified if provided.
         * Schedule registry flush.
@@ -15,50 +31,58 @@ def save(self, m=None, templates=False, oldModel=None, newIdxToOld = None):
         m -- A Model
         templates -- whether to check for cards not generated in this model
         oldModel -- a previous version of the model, to which to compare
-        newIdxToOld -- a list whose i-th element state which is the
-        new position of the i-th template of the old model.
+        newIdxMeta -- a list whose i-th element state which is the
+        new position of the i-th template of the old model and whether the template is new.
         """
         # print(f"""oldModel is: «
 # {oldModel}
-# », newIdxToOld is «
-# {newIdxToOld}
+# », newIdxMeta is «
+# {newIdxMeta}
 # »""")
-        if newIdxToOld is None:
-            newIdxToOld = {i:None for i in range(len(m['tmpls']))}
-        else:
-                assert isinstance(newIdxToOld,list)
-        posToRecompute = {idx
-                          for idx, tmpl in enumerate(m['tmpls'])
-                          if (newIdxToOld[idx] is None or
-                              tmpl['qfmt']!=oldModel['tmpls'][newIdxToOld[idx]]['qfmt'])
-        }
         if m and m['id']:
+            if newIdxMeta is None:
+                    print("All indexes are new")
+                    newIdxMeta = [{"is new": True,
+                                   "old idx":None}]*len(m['tmpls'])
+            else:
+                    assert isinstance(newIdxMeta,list)
             m['mod'] = intTime()
             m['usn'] = self.col.usn()
-            self._updateRequired(m, oldModel, posToRecompute, newIdxToOld)
+            self._updateRequired(m, oldModel, newIdxMeta)
             if templates:
-                self._syncTemplates(m, posToRecompute)
+                self._syncTemplates(m, getPosToRecompute(m, True, oldModel, newIdxMeta))
         self.changed = True
         runHook("newModel")
 
 ModelManager.save = save
 @debugFun
-def _updateRequired(self, m, oldModel = None, posToRecompute = None, newIdxToOld = None):
+def _updateRequired(self, m, oldModel = None, newIdxMeta = None):
         """Entirely recompute the model's req value"""
         if m['type'] == MODEL_CLOZE:
             # nothing to do
             return
+        posToRecompute = getPosToRecompute(m, False, oldModel, newIdxMeta)
         req = []
         flds = [f['name'] for f in m['flds']]
         for idx,t in enumerate(m['tmpls']):
-            if oldModel and idx not in posToRecompute :
-                oldIdx = newIdxToOld[idx]#Assumed not None,
+            if oldModel is not None and idx not in posToRecompute :
+                #print(f"Old model is not None and idx {idx} not is posToRecompute")
+                oldIdx = newIdxMeta[idx]["old idx"]# Assumed not None,
                 # otherwise idx would be in posToRecompute
-                req.append(oldModel['req'][oldIdx])
+                ord, type, req_ = oldModel['req'][oldIdx]
+                tup = (idx, type, req_)
+                req.append(tup)
+                #print(f"Appending to req «{tup}»")
                 continue
             else:
+                # if oldModel is  None:
+                #         #print("oldModel is None")
+                # else:
+                #         #print(f"idx {idx} is posToRecompute")
                 ret = self._reqForTemplate(m, flds, t)
-                req.append((t['ord'], ret[0], ret[1]))
+                tup = (idx, ret[0], ret[1])
+                req.append(tup)
+                #print(f"Appending to req «{tup}»")
         m['req'] = req
 ModelManager._updateRequired = _updateRequired
 
@@ -70,6 +94,7 @@ ModelManager._syncTemplates = _syncTemplates
 
 @debugFun
 def availOrds(self, m, flds, posToRecompute = None):
+        #oldModel = None, newIdxMeta = None
         """Given a joined field string, return template ordinals which should be
         seen. See ../documentation/templates_generation_rules.md for
         the detail
@@ -81,8 +106,12 @@ def availOrds(self, m, flds, posToRecompute = None):
         for c, f in enumerate(splitFields(flds)):
             fields[c] = f.strip()
         avail = []#List of ord cards which would be generated
-        for ord, type, req in m['req']:
-            if posToRecompute and ord not in posToRecompute:
+        for tup in m['req']:
+            # print(f"""tup is {tup}.
+            # m['req'] is {m['req']}
+            # m is {m}""")
+            ord, type, req = tup
+            if posToRecompute is not None and ord not in posToRecompute:
                 continue
             # unsatisfiable template
             if type == "none":

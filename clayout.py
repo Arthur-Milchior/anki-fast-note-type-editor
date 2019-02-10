@@ -10,10 +10,18 @@ from .debug import debugFun
 oldInit = CardLayout.__init__
 @debugFun
 def init(self,*args,**kwargs):
-    oldInit(self,*args,**kwargs)
+    try:
+        oldInit(self,*args,**kwargs)
+    except ValueError:
+        print (f"recursive model is {self.model}")
+        raise
     # self.oldIdxToNew = list(range(len(self.model['tmpls'])))
-    self.newIdxToOld = list(range(len(self.model['tmpls'])))
+    self.newIdxMeta = [
+        {"is new":False,
+         "old idx":idx}
+        for idx in (range(len(self.model['tmpls'])))]
     self.originalModel = copy.deepcopy(self.model)
+
 
 CardLayout.__init__ = init
 @debugFun
@@ -21,7 +29,7 @@ def onRemove(self):
         if len(self.model['tmpls']) < 2:
             return showInfo(_("At least one card type is required."))
         idx = self.ord
-        originalIdx = self.newIdxToOld[idx]
+        originalIdx = self.newIdxMeta[idx]["old idx"]
         cards = self.mm.tmplUseCount(self.model, idx)
         cards = ngettext("%d card", "%d cards", cards) % cards
         msg = (_("Delete the '%(a)s' card type, and its %(b)s?") %
@@ -35,7 +43,7 @@ Please create a new card type first."""))
 
         # if originalIdx is not None:
         #     oldIdxToNew[originalIdx] = None
-        del self.newIdxToOld[idx]
+        del self.newIdxMeta[idx]
         self.redraw()
 CardLayout.onRemove = onRemove
 
@@ -48,7 +56,7 @@ def onReorder(self):
             _("Enter new card position (1...%s):") % n,
             default=str(cur))
         idx = self.ord
-        originalIdx = self.newIdxToOld[idx]
+        originalMeta = self.newIdxMeta[idx]
         if not pos:
             return
         try:
@@ -61,8 +69,8 @@ def onReorder(self):
             return
         pos -= 1
         self.mm.moveTemplate(self.model, self.card.template(), pos)
-        del self.newIdxToOld[idx]
-        self.newIdxToOld.insert(pos,originalIdx)
+        del self.newIdxMeta[idx]
+        self.newIdxMeta.insert(pos,originalMeta)
         self.ord = pos
         self.redraw()
 CardLayout.onReorder = onReorder
@@ -80,7 +88,8 @@ def onAddCard(self):
         t['qfmt'] = old['qfmt']
         t['afmt'] = old['afmt']
         self.mm.addTemplate(self.model, t)
-        self.newIdxToOld.append(self.newIdxToOld[self.ord])
+        self.newIdxMeta.append({"old idx":self.newIdxMeta[self.ord]["old idx"],
+                                "is new": True})
         self.ord = len(self.cards)
         self.redraw()
 CardLayout.onAddCard = onAddCard
@@ -95,7 +104,7 @@ def reject(self):#same as accept
                 self.note[name] = ""
             self.mw.col.db.execute("delete from notes where id = ?",
                                    self.note.id)
-        self.mm.save(self.model, templates=True, oldModel = self.originalModel, newIdxToOld = self.newIdxToOld)
+        self.mm.save(self.model, templates=True, oldModel = self.originalModel, newIdxMeta = self.newIdxMeta)
         self.mw.reset()
         saveGeom(self, "CardLayout")
         return QDialog.reject(self)
