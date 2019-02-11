@@ -1,1 +1,1 @@
-zip fastNoteEditor.zip *py README.md LICENSE config* zipping ankiweb
+zip fastNoteEditor.zip *py README.md LICENSE config* zipping ankiweb --exclude \*~

@@ -6,7 +6,10 @@ saving the note type may take several minutes. This is because anki
 redoes some useless computation and does not consider the fact that
 some template did not change.
 
-This add-on just ensure that this computation is done only when it is required.
+This add-on just ensure that this computation is done only when it is
+required.
+
+
 ## Usage
 Just install this add-on.
 ## Version 2.0
