@@ -21,6 +21,9 @@ This add-on redefine the methods:
 * aqt.clayout.CardLayout.onReorder
 * aqt.clayout.CardLayout.onAddCard
 * aqt.clayout.CardLayout.reject
+* aqt.fields.FieldDialog.reject
+* aqt.fields.FieldDialog.__init__
+* aqt.fields.FieldDialog._uniqueName
 * anki.collection._Collection.genCards
 * anki.models.ModelManager.save
 * anki.models.ModelManager._updateRequired
