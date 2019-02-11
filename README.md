@@ -9,7 +9,6 @@ some template did not change.
 This add-on just ensure that this computation is done only when it is
 required.
 
-
 ## Usage
 Just install this add-on.
 ## Version 2.0
@@ -39,3 +38,6 @@ Based on    | Anki code by Damien Elmes <anki@ichi2.net>
 License     | GNU AGPL, version 3 or later; http://www.gnu.org/licenses/agpl.html
 Source in   | https://github.com/Arthur-Milchior/anki-fast-note-type-editor
 Addon number| [802285486](https://ankiweb.net/shared/info/802285486)
+
+I believe it should be implemented in anki's core code, but this was
+refused. https://anki.tenderapp.com/discussions/ankidesktop/32549-potential-pull-request
