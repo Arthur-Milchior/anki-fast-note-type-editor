@@ -1,5 +1,5 @@
 from aqt.clayout import CardLayout
-from aqt.qt import *#for ngettext
+from aqt.qt import *#for ngettext, QDialog
 from anki.lang import _
 from aqt.utils import showWarning, askUser, showInfo, getOnlyText, saveGeom
 from anki.sound import clearAudioQueue

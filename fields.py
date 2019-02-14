@@ -1,4 +1,6 @@
 from aqt.fields import FieldDialog
+from aqt.utils import  getOnlyText, showWarning
+from aqt.qt import *#for QDialog
 import copy
 
 def _uniqueName(self, prompt, ignoreOrd=None, old=""):
@@ -21,10 +23,12 @@ def _uniqueName(self, prompt, ignoreOrd=None, old=""):
 FieldDialog._uniqueName = _uniqueName
 
 oldInit = FieldDialog.__init__
-def init(self, *args,**kwargs):
-    oldInit(self, *args,**kwargs):
-    self.originalModel = copy.deepcopy(self.model)
+def init(self, mw, note, *args,**kwargs):
+    self.originalModel = copy.deepcopy(note.model())
+    oldInit(self, mw, note, *args,**kwargs)
+
 FieldDialog.__init__ = init
+print("Changing field dialog")
 
 def reject(self):
     print("Calling field's new reject")

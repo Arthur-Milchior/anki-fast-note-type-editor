@@ -77,3 +77,4 @@ insert into cards values (?,?,?,?,?,?,0,0,?,0,0,0,0,0,0,0,0,"")""",
     return rem
 
 _Collection.genCards = genCards
+print("gen cards is changed")
