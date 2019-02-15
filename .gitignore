@@ -104,3 +104,4 @@ venv.bak/
 .mypy_cache/
 *~
 /fastNoteEditor.zip
+/meta.json

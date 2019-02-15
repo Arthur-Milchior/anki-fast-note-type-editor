@@ -11,6 +11,11 @@ required.
 
 ## Usage
 Just install this add-on.
+## Warning
+For some reason unkwon right now, this add-on is not compatible with
+the add-on ```Night-Mode```. More precisely, once you turn the night
+mode on, you can't edit card's type anymore. I'm currently trying to
+understand this error.
 ## Version 2.0
 None
 ## Internal
