@@ -14,8 +14,20 @@ Just install this add-on.
 ## Warning
 For some reason unkwon right now, this add-on is not compatible with
 the add-on ```Night-Mode```. More precisely, once you turn the night
-mode on, you can't edit card's type anymore. I'm currently trying to
-understand this error.
+mode on, you can't edit card's type anymore.
+
+According to (Night mode's author
+advice)[https://github.com/krassowski/Anki-Night-Mode/issues/60], you
+may solve the problem by changing night's mode configuration,
+```View → Night Mode → Choose what to style```
+and deactivate night mode for CardLayout. This may solve the problem.
+
+It won't be corrected in the near future (unless someone pay me for
+it.) Which means that if you want to use Night-mode, you must disable
+the current add-on. If you really need my add-on because it saves a
+lot of time, do your change to note type while you are still in day
+mode, and goes to night mode only once the changes are done.
+
 ## Version 2.0
 None
 ## Internal
