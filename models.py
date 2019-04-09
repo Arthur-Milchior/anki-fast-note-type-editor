@@ -22,7 +22,7 @@ def getChangedTemplates(m, oldModel = None, newTemplatesData=None):
     return changedTemplates
 
 @debugFun
-def save(self, m=None, templates=False, oldModel=None, newTemplatesData = None):
+def save(self, m=None, templates=False, oldModel=None, newTemplatesData = None, recomputeReq=True):
     """
     * Mark m modified if provided.
     * Schedule registry flush.
@@ -42,12 +42,14 @@ def save(self, m=None, templates=False, oldModel=None, newTemplatesData = None):
 # »""")
     if m and m['id']:
         if newTemplatesData is None:
-            print("All indexes are new")
             newTemplatesData = [{"is new": True,
                            "old idx":None}]*len(m['tmpls'])
         m['mod'] = intTime()
         m['usn'] = self.col.usn()
-        changedOrNewReq = self._updateRequired(m, oldModel, newTemplatesData)
+        if recomputeReq:
+            changedOrNewReq = self._updateRequired(m, oldModel, newTemplatesData)
+        else:
+            changedOrNewReq = set()
         if templates:
             self._syncTemplates(m, changedOrNewReq)
     self.changed = True

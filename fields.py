@@ -37,7 +37,7 @@ def reject(self):
         self.mw.progress.start()
         self.mw.col.updateFieldCache(self.mm.nids(self.model))
         self.mw.progress.finish()
-    self.mm.save(self.model, templates = True, oldModel = self.originalModel)
+    self.mm.save(self.model, templates = True, oldModel = self.originalModel, recomputeReq = True)
     self.mw.reset()
     QDialog.reject(self)
 FieldDialog.reject = reject
