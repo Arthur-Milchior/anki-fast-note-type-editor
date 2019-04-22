@@ -1,4 +1,6 @@
 from aqt.models import Models
+from aqt.utils import getText
+from aqt.models import AddModel
 
 def onRename(self):
     txt = getText(_("New name:"), default=self.model['name'])
