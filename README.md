@@ -11,6 +11,16 @@ This add-on change plenty of methods. Which means that this add-on
 risks to be incompatible with other add-on. Incompatible add-on will
 be listed here when I learn about them.
 
+In particular it is incompatible with add-ons:
+* [12287769](https://ankiweb.net/shared/info/12287769) «Explain
+deletion». This add-on ensure that the file ```deleted.txt``` state
+why notes are deleted.
+* [Database checker/fixer explained, more fixers 1135180054](https://ankiweb.net/shared/info/1135180054)
+
+Please instead use-addon
+[777545149](https://ankiweb.net/shared/info/777545149) which merges
+those three add-ons
+
 ## What this add-on improve
 ### Note type with a lot of card type
 Assume you have a note type with a lot of card type, or with a lot of

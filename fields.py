@@ -30,14 +30,15 @@ def init(self, mw, note, *args,**kwargs):
 FieldDialog.__init__ = init
 print("Changing field dialog")
 
-def reject(self):
-    print("Calling field's new reject")
-    self.saveField()
-    if self.oldSortField != self.model['sortf']:
-        self.mw.progress.start()
-        self.mw.col.updateFieldCache(self.mm.nids(self.model))
-        self.mw.progress.finish()
-    self.mm.save(self.model, templates = True, oldModel = self.originalModel, recomputeReq = True)
-    self.mw.reset()
-    QDialog.reject(self)
-FieldDialog.reject = reject
+#TODO: Recompute template having a field changed.
+# def reject(self):
+#     print("Calling field's new reject")
+#     self.saveField()
+#     if self.oldSortField != self.model['sortf']:
+#         self.mw.progress.start()
+#         self.mw.col.updateFieldCache(self.mm.nids(self.model))
+#         self.mw.progress.finish()
+#     self.mm.save(self.model, templates = True, oldModel = self.originalModel, recomputeReq = True)
+#     self.mw.reset()
+#     QDialog.reject(self)
+# FieldDialog.reject = reject
