@@ -13,7 +13,7 @@ be listed here when I learn about them.
 
 In particular it is incompatible with add-ons:
 * [12287769](https://ankiweb.net/shared/info/12287769) «Explain
-deletion». This add-on ensure that the file ```deleted.txt``` state
+deletion». This add-on ensure that the file `deleted.txt` state
 why notes are deleted.
 * [Database checker/fixer explained, more fixers 1135180054](https://ankiweb.net/shared/info/1135180054)
 
@@ -103,7 +103,7 @@ refused.
 * https://anki.tenderapp.com/discussions/ankidesktop/32549-potential-pull-request
 * https://github.com/dae/anki/pull/297#issuecomment-481120247
 
-Some methods calling ```anki.models.ModelManager.save```  are not
+Some methods calling `anki.models.ModelManager.save`  are not
 modified, because they are long and rarely used; so it's better no to
 touch them to avoid incompatibility with :
 * anki.collection._Collection.fixIntegrity
