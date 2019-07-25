@@ -21,6 +21,8 @@ Please instead use-addon
 [777545149](https://ankiweb.net/shared/info/777545149) which merges
 those three add-ons
 
+Furthemore, this add-on has a compatibility issue with [night mode](https://ankiweb.net/shared/info/1496166067), go to «View → Night Mode → Choose what to style» and deactivate Night Mode for Clayout. It would solve the problem.
+
 ## What this add-on improve
 ### Note type with a lot of card type
 Assume you have a note type with a lot of card type, or with a lot of
